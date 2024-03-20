@@ -10,7 +10,7 @@ class TextManager
 
     public TextManager(string initialText)
     {
-        text = initialText;
+        this.text = initialText;
     }
 
     public string GetText
@@ -41,21 +41,21 @@ class TextManager
     }
 
 
-    public int CountLetters()
+    public int CountLetters
     {
-        return text.Length;
+        get { return text.Length; }
     }
 
 
-    public int CountWords()
+    public int CountWords
     {
-        return text.Split(new char[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries).Length;
+        get { return text.Split(new char[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries).Length; }
     }
 
 
-    public int CountSentences()
+    public int CountSentences
     {
-        return text.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Length;
+        get { return text.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Length; }
     }
 
 
@@ -102,8 +102,11 @@ class TextManager
     {
         return text.Contains(sentence);
     }
+    public bool EqualSentence(string sentence,string sentence1)
+    {
+        return sentence.Equals(sentence1, StringComparison.OrdinalIgnoreCase);
+    }
 
- 
     public void SerializeToJson(string filePath)
     {
         string json = JsonConvert.SerializeObject(this);
@@ -126,10 +129,10 @@ class Program
     static void Main(string[] args)
     {
         Console.OutputEncoding = Encoding.UTF8;
-        TextManager textManager = new TextManager("Wassup Bro,Nice How do u do? I just wanna tell u that u were invited to the party on Sunday.Nice too meet u.");
+        TextManager textManager = new TextManager("Wassup Bro,Nice How do u do? I just wanna tell u that u were invited to the party on Sunday.How do u do?.");
         Console.WriteLine("Оригінальний текст:");
         Console.WriteLine(textManager.GetText);
-
+        Console.WriteLine("Порівняння речень: " + textManager.EqualSentence(textManager.GetText, "Wassup Bro,Nice How do u do? I just wanna tell u that u were invited to the party on Sunday.How do u do?."));
         textManager.AddSentence("Regards");
         Console.WriteLine("\nТекст після додавання речення:");
         Console.WriteLine(textManager.GetText);
@@ -142,13 +145,14 @@ class Program
         Console.WriteLine("\nТекст після вставки речення:");
         Console.WriteLine(textManager.GetText);
 
-        Console.WriteLine("\nКількість букв у тексті: " + textManager.CountLetters());
-        Console.WriteLine("Кількість слів у тексті: " + textManager.CountWords());
-        Console.WriteLine("Кількість речень у тексті: " + textManager.CountSentences());
+        Console.WriteLine("\nКількість букв у тексті: " + textManager.CountLetters);
+        Console.WriteLine("Кількість слів у тексті: " + textManager.CountWords);
+        Console.WriteLine("Кількість речень у тексті: " + textManager.CountSentences);
 
         Console.WriteLine("\nРечення під номером 1: " + textManager.GetSentence(1));
         Console.WriteLine("Найдовше речення: " + textManager.LongestSentence());
         Console.WriteLine("Найкоротше речення: " + textManager.ShortestSentence());
+        
 
         Console.WriteLine("\nТекст містить речення 'Wassup Bro': " + textManager.ContainsSentence("Wassup Bro"));
 
@@ -168,5 +172,5 @@ class Program
 
 
 
-
+//Wassup Bro,Nice How do u do? I just wanna tell u that u were invited to the party on Sunday.How do u do?.
 // Wassup Bro, How do u do? I just wanna tell u that u were invited to the party on Sunday.Nice too meet u
